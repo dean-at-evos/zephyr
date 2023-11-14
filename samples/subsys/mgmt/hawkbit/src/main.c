@@ -12,6 +12,7 @@
 #include <zephyr/logging/log.h>
 
 #include "dhcp.h"
+#include "wifi.h"
 
 #if defined(CONFIG_NET_SOCKETS_SOCKOPT_TLS)
 #include <zephyr/net/tls_credentials.h>
@@ -27,11 +28,16 @@ int main(void)
 	LOG_INF("Hawkbit sample app started");
 	LOG_INF("Image build time: " __DATE__ " " __TIME__);
 
+#if defined(CONFIG_NET_L2_WIFI_SHELL)
+	LOG_INF("WiFi shell mode, try and connect");
+	app_wifi_startup();
+#else
 	app_dhcpv4_startup();
+#endif
 
 #if defined(CONFIG_NET_SOCKETS_SOCKOPT_TLS)
-	tls_credential_add(CA_CERTIFICATE_TAG, TLS_CREDENTIAL_CA_CERTIFICATE,
-			   ca_certificate, sizeof(ca_certificate));
+	tls_credential_add(CA_CERTIFICATE_TAG, TLS_CREDENTIAL_CA_CERTIFICATE, ca_certificate,
+			   sizeof(ca_certificate));
 #endif
 
 	ret = hawkbit_init();
