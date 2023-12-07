@@ -40,6 +40,7 @@ void helloLoop(const char *my_name,
 
 	while (1) {
 		/* take my semaphore */
+		void *test = k_malloc(1024);
 		k_sem_take(my_sem, K_FOREVER);
 
 		/* say "hello" */
@@ -54,6 +55,7 @@ void helloLoop(const char *my_name,
 
 		/* wait a while, then let other thread have a turn */
 		k_msleep(SLEEPTIME);
+		k_free(test);
 		k_sem_give(other_sem);
 	}
 }

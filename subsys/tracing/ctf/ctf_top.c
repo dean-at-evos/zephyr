@@ -7,6 +7,7 @@
 #include <zephyr/kernel.h>
 #include <zephyr/kernel_structs.h>
 #include <kernel_internal.h>
+#include <zephyr/sys/mem_stats.h>
 #include <ctf_top.h>
 
 
@@ -318,4 +319,18 @@ void sys_trace_k_timer_status_sync_exit(struct k_timer *timer, uint32_t result)
 		(uint32_t)(uintptr_t)timer,
 		result
 		);
+}
+
+void sys_trace_k_heap_free(struct k_heap *h)
+{
+	if (IS_ENABLED(CONFIG_SYS_HEAP_RUNTIME_STATS)) {
+		struct sys_memory_stats stats;
+
+		sys_heap_runtime_stats_get(&h->heap, &stats);
+		ctf_top_heap_free((uint32_t)(uintptr_t)h, (uint32_t)stats.free_bytes,
+				  (uint32_t)stats.allocated_bytes,
+				  (uint32_t)stats.max_allocated_bytes);
+	} else {
+		ctf_top_heap_free((uint32_t)(uintptr_t)h, 0, 0, 0);
+	}
 }

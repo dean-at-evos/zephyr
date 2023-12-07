@@ -302,7 +302,8 @@ extern "C" {
 #define sys_port_trace_k_heap_aligned_alloc_exit(heap, timeout, ret)
 #define sys_port_trace_k_heap_alloc_enter(heap, timeout)
 #define sys_port_trace_k_heap_alloc_exit(heap, timeout, ret)
-#define sys_port_trace_k_heap_free(heap)
+#define sys_port_trace_k_heap_free(heap)	\
+	sys_trace_k_heap_free(heap)
 #define sys_port_trace_k_heap_sys_k_aligned_alloc_enter(heap)
 #define sys_port_trace_k_heap_sys_k_aligned_alloc_exit(heap, ret)
 #define sys_port_trace_k_heap_sys_k_malloc_enter(heap)
@@ -433,6 +434,9 @@ void sys_trace_k_timer_status_sync_enter(struct k_timer *timer);
 void sys_trace_k_timer_status_sync_exit(struct k_timer *timer, uint32_t result);
 
 void sys_trace_k_event_init(struct k_event *event);
+
+/* Heap */
+void sys_trace_k_heap_free(struct k_heap *h);
 
 #ifdef __cplusplus
 }

@@ -310,3 +310,14 @@ event {
 		uint32_t result;
 	};
 };
+
+event {
+	name = heap_free;
+	id = 0x34;
+	fields := struct {
+		uint32_t id;
+		uint32_t free;
+		uint32_t allocated;
+		uint32_t max_allocated;
+	};
+};
